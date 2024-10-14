@@ -24,7 +24,7 @@
                 <label for="typeDocument" class="inputGroup__label w-100">
                     Tipo de documento 
                 </label>
-                <Dropdown id="typeDocument" v-model="user.typeDocument" :options="listTypesDocument" optionLabel="descripcion" placeholder="Select type" class="w-100"/>
+                <Dropdown id="typeDocument" v-model="user.tipoDocumento" :options="listTypesDocument" optionLabel="descripcion" placeholder="Select type" class="w-100"/>
             </div>
             
             <div class="inputGroup" style="width:50%">
@@ -65,7 +65,7 @@
                 <label for="birthdate" class="inputGroup__label w-100">
                     Fecha de nacimiento
                 </label>
-                <Calendar id="birthdate" v-model="user.birthDate" dateFormat="dd/mm/yy" class="w-100"/>
+                <Calendar id="birthdate" v-model="user.fechaNacimiento" dateFormat="dd/mm/yy" class="w-100"/>
             </div>
         </div>
 
@@ -137,6 +137,9 @@ import PrimeButton from 'primevue/button'
 
 export default {
     name: "SignUpForm",
+    props: {
+        objUser: {type:Object, default: null}
+    },
     components: {
         // SaveCancelButton,
         InputText,
@@ -150,20 +153,38 @@ export default {
         return {
             confirmPassword: "",
             user: {
+                idUsuario: null,
                 nombres: "",
                 apellidos: "",
-                typeDocument: 0,
                 dni: "",
-                birthDate: new Date(),
+                fechaNacimiento: new Date(),
+                idTipoDocumento: 0,
+                tipoDocumento: {
+                    idTipoDocumento: 1,
+                    descripcion: "DNI"
+                },
+                email: "",
                 direccion: "",
+                idDepartamento: 0,
+                idProvincia: 0,
+                idDistrito: 0,
+                codigoPostal: "",
+                contrasena: "",
+                celular: "",
+                idTipoUsuario: 1,
+                tipoUsuario: {
+                    idTipoUsuario: 1,
+                    descripcion: "Cliente"
+                },
+                activo: true,
+
+
+                // typeDocument: 0,
+                // birthDate: new Date(),
                 department: null,
                 province: null,
                 district: null,
-                codigoPostal: "",
-                celular: "",
-                contrasena: "",
                 userType: null,
-                activo: null,
             },
             listProvinces: [],
             listDepartments: [],
@@ -181,6 +202,12 @@ export default {
         this.searchDepartments()
         this.searchTypeDocument()
         this.searchTypeUsers()
+        console.log(this.objUser)
+        if(this.objUser != null){
+            this.user = this.objUser
+            this.user.fechaNacimiento = this.user.fechaNacimiento.replace("-", "/")
+            this.user.fechaNacimiento = new Date(this.user.fechaNacimiento)
+        }
     },
     methods: {
         searchTypeDocument() {
@@ -210,6 +237,11 @@ export default {
                     id: Number(departamento.id), // Convertir a número
                     name: departamento.name
                 }))
+
+                if (Object.keys(this.objUser).length > 0) {
+                    const id = this.listDepartments.find(departaments => departaments.id === this.objUser.idDepartamento.replace(/^0+/, ''))
+                    console.log(id)
+                }
             })
             .catch(()=>{
                 this.$makeToast('error', 'error')
@@ -225,6 +257,7 @@ export default {
                     id: Number(provincia.id), // Convertir a número
                     name: provincia.name
                 }))
+                
             })
             .catch(()=>{
                 this.$makeToast('error', 'error')
@@ -249,27 +282,41 @@ export default {
             this.user.idDepartamento = this.user.department.id
             this.user.idProvincia = this.user.province.id
             this.user.idDistrito = this.user.district.id
-            this.user.idTipoDocumento = this.user.typeDocument.idTipoDocumento
+            this.user.idTipoDocumento = this.user.tipoDocumento.idTipoDocumento
             this.user.idTipoUsuario = 1
-            this.user.fechaNacimiento = this.$date.convertStringToFormat(this.user.birthDate.toString(), "YYYY-MM-DD")
+            this.user.fechaNacimiento = this.$date.convertStringToFormat(this.user.fechaNacimiento.toString(), "YYYY-MM-DD")
 
             delete this.user.department
             delete this.user.province
             delete this.user.district
-            delete this.user.typeDocument
+            delete this.user.tipoDocumento
             delete this.user.userType
-            delete this.user.birthDate
+            delete this.user.tipoUsuario
+            // delete this.user.birthDate
 
-            this.$axios.$post('api/usuarios/registroDeUsuario', this.user )
-            .then(response => {
-                console.log(response)
-                this.$closeModal('modal-signup-form')
-            }).catch(()=>{
-                this.$makeToast("error", this.$t("app").error)
-            })
-            .finally(()=>{
-                console.log("Usuario registrado")
-            })
+            if(this.user.idUsuario == null) {
+                this.$axios.$post('api/usuarios/registroDeUsuario', this.user )
+                .then(response => {
+                    console.log(response)
+                    this.$closeModal('modal-signup-form')
+                }).catch(()=>{
+                    this.$makeToast("error", this.$t("app").error)
+                })
+                .finally(()=>{
+                    console.log("Usuario registrado")
+                })
+            } else {
+                this.$axios.$put(`api/usuarios/actualizacionDeUsuario/${this.user.dni}`, this.user)
+                .then(response => {
+                    console.log(response)
+                    this.$closeModal('modal-editar')
+                }).catch(()=>{
+                    this.$makeToast("error", this.$t("app").error)
+                })
+                .finally(()=>{
+                    console.log("Usuario registrado")
+                })
+            }
         },
     }
 }

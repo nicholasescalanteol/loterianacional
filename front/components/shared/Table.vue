@@ -127,10 +127,10 @@ export default {
       this.$emit('changePage',{page: this.currentPage,
                               page_size: this.perPage})
     },
-    //loops through each value entered in LABEL and gets the final object  value
+    // loops through each value entered in LABEL and gets the final object  value
     getPropertyValue(object, label){
       let value = object
-      let labels = label.split('.')
+      const labels = label.split('.')
       labels.forEach(la => {
         value = value[la]?value[la]:''
       })
