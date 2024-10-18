@@ -1,5 +1,6 @@
 package org.loterianacional.springcloud.msvc.repositories;
 
+import org.springframework.data.repository.query.Param;
 import org.loterianacional.springcloud.msvc.models.entities.TipoDocumento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

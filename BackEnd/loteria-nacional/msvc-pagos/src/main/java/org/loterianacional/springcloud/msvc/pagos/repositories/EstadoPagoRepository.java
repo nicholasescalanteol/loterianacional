@@ -1,6 +1,6 @@
 package org.loterianacional.springcloud.msvc.pagos.repositories;
 
-import feign.Param;
+import org.springframework.data.repository.query.Param;
 import org.loterianacional.springcloud.msvc.pagos.models.entities.EstadoPago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

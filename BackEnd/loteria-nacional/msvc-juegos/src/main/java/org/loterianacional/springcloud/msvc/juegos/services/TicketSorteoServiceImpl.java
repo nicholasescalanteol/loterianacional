@@ -1,10 +1,13 @@
 package org.loterianacional.springcloud.msvc.juegos.services;
 
 import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoCompra;
+import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoFisico;
+import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoVirtual;
 import org.loterianacional.springcloud.msvc.juegos.models.entities.TicketSorteo;
 import org.loterianacional.springcloud.msvc.juegos.repositories.TicketSorteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +18,19 @@ public class TicketSorteoServiceImpl implements TicketSorteoService{
 
     @Autowired
     private TicketSorteoRepository repository;
+
+    @Override
+    @Transactional
+    public void insertarTicketSorteoVirtual(TicketSorteoVirtual ticketSorteo) {
+        repository.insertarTicketSorteoVirtual(ticketSorteo.getLimiteInferior(), ticketSorteo.getCantidadTickets(), ticketSorteo.getIdCompraSorteo());
+    }
+
+    @Override
+    @Transactional
+    public void insertarTicketSorteoFisico(TicketSorteoFisico ticketSorteo) {
+        repository.insertarTicketSorteoFisico(ticketSorteo.getNumeroTicketInicial(), ticketSorteo.getCantidadTickets(), ticketSorteo.getIdCompraSorteo());
+    }
+
 
     @Override
     public List<TicketSorteoCompra> listarTicketSorteoPorCompraSorteo(Integer idCompraSorteo) {

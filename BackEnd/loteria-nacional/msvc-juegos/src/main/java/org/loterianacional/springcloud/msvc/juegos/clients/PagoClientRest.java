@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @FeignClient(name = "msvc-pagos", url = "localhost:8003")
+//@FeignClient(name = "msvc-pagos", url = "msvc-pagos:8003")
 //@FeignClient(name = "msvc-pagos", url = "host.docker.internal:8003")
 public interface PagoClientRest {
 

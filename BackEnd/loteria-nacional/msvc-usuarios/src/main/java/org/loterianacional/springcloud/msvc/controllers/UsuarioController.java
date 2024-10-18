@@ -23,11 +23,16 @@ public class UsuarioController {
     @PostMapping("/registroDeUsuario")
     public ResponseEntity<?> insertarUsuario (@Valid @RequestBody Usuario usuario, BindingResult result){
 
+        Integer nombreUsuarioExist = service.nombreUsuarioExistente(usuario.getNombreUsuario());
         Integer emailExist = service.correoExistente(usuario.getEmail());
         Integer dniExist = service.dniExistente(usuario.getDni());
 
         if(result.hasErrors()){
             return validarInsertUpdate(result);
+        }
+        if(nombreUsuarioExist != 0)
+        {
+            return ResponseEntity.badRequest().body("El nombre de usuario ingresado ya se encuentra registrado.");
         }
         if(emailExist != 0)
         {
@@ -43,22 +48,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/actualizacionDeUsuario/{dni}")
-    public ResponseEntity<?> actualizarUsuario (@Valid @PathVariable String dni, @RequestBody Usuario usuario, BindingResult result){
-
-        Integer emailExist = service.correoExistente(usuario.getEmail());
-        Integer dniExist = service.dniExistente(usuario.getDni());
-
-        if(result.hasErrors()){
-            return validarInsertUpdate(result);
-        }
-        if(emailExist != 0)
-        {
-            return ResponseEntity.badRequest().body("El correo ingresado ya se encuentra registrado.");
-        }
-        if(dniExist != 0)
-        {
-            return ResponseEntity.badRequest().body("El dni ingresado ya se encuentra registrado.");
-        }
+    public ResponseEntity<?> actualizarUsuario (@PathVariable String dni, @RequestBody Usuario usuario, BindingResult result){
 
         service.actualizarUsuario(dni,usuario);
         return ResponseEntity.ok("Se actualizó al usuario.");

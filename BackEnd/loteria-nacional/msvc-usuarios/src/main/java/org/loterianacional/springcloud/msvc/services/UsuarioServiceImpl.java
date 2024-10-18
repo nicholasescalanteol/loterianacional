@@ -139,6 +139,13 @@ public class UsuarioServiceImpl implements UsuarioService{
     }
 
     @Override
+    public Integer nombreUsuarioExistente(String nombreUsuario) {
+        Integer nombreUsuarioExist = repository.nombreUsuarioExistente(nombreUsuario);
+        return nombreUsuarioExist;
+
+    }
+
+    @Override
     public Integer dniExistente(String dni) {
         Integer dniExist = repository.dniExistente(dni);
         return dniExist;

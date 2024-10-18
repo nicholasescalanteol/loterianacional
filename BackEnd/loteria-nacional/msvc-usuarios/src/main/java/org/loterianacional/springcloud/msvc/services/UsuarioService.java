@@ -12,6 +12,7 @@ public interface UsuarioService {
     void eliminarUsuario(String dni);
     List<Usuario> listarUsuarios();
     List<Usuario> listarUsuarioPorDni(String dni);
+    Integer nombreUsuarioExistente(String nombreUsuario);
     Integer dniExistente(String dni);
     Integer correoExistente(String email);
 

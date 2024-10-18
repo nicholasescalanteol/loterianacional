@@ -1,6 +1,8 @@
 package org.loterianacional.springcloud.msvc.juegos.controllers;
 
 import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoCompra;
+import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoFisico;
+import org.loterianacional.springcloud.msvc.juegos.models.TicketSorteoVirtual;
 import org.loterianacional.springcloud.msvc.juegos.models.entities.Sorteo;
 import org.loterianacional.springcloud.msvc.juegos.models.entities.TicketSorteo;
 import org.loterianacional.springcloud.msvc.juegos.services.TicketSorteoService;
@@ -12,13 +14,27 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/juegos/sorteo/ticket")
+@RequestMapping("/api/juegos/ticketSorteo")
 public class TicketSorteoController {
 
     @Autowired
     private TicketSorteoService service;
 
-    @GetMapping("/compraSorteo")
+    @PostMapping("/registroTicketSorteoVirtual")
+    public ResponseEntity<?> insertarTicketSorteoVirtual (@RequestBody TicketSorteoVirtual ticketSorteo){
+
+        service.insertarTicketSorteoVirtual(ticketSorteo);
+        return ResponseEntity.ok("Registro de tickets vituales correcto.");
+    }
+
+    @PostMapping("/registroTicketSorteoFisico")
+    public ResponseEntity<?> insertarTicketSorteoFisico (@RequestBody TicketSorteoFisico ticketSorteo){
+
+        service.insertarTicketSorteoFisico(ticketSorteo);
+        return ResponseEntity.ok("Registro de tickets fisicos correcto.");
+    }
+
+    @GetMapping("/ticketPorCompra")
     public ResponseEntity<?> listarTicketSorteoPorCompraSorteo(@RequestParam("idCompraSorteo")  Integer idCompraSorteo){
         List<TicketSorteoCompra> ticketPorCompra = service.listarTicketSorteoPorCompraSorteo(idCompraSorteo);
         if(ticketPorCompra.isEmpty()){

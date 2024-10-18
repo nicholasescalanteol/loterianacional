@@ -14,6 +14,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class CompraSorteoUsuario {
 
+    private Integer idSorteo;
     private Integer idCompraSorteo;
     private String juego;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
