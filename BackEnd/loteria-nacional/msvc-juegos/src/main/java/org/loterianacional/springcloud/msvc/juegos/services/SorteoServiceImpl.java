@@ -3,10 +3,12 @@ package org.loterianacional.springcloud.msvc.juegos.services;
 import feign.FeignException;
 import org.loterianacional.springcloud.msvc.juegos.clients.PagoClientRest;
 import org.loterianacional.springcloud.msvc.juegos.models.CompraSorteoUsuario;
+import org.loterianacional.springcloud.msvc.juegos.models.entities.Juego;
 import org.loterianacional.springcloud.msvc.juegos.models.entities.Sorteo;
 import org.loterianacional.springcloud.msvc.juegos.repositories.SorteoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -25,6 +27,36 @@ public class SorteoServiceImpl implements  SorteoService{
     @Autowired
     private PagoClientRest client;
 
+
+    @Override
+    @Transactional
+    public void insertarSorteo(Sorteo sorteo) {
+        repository.insertarSorteo(sorteo.getIdJuego(),
+                sorteo.getFechaSorteo(),
+                sorteo.getLimiteInferiorOnline());
+    }
+
+    @Override
+    @Transactional
+    public void actualizarSorteo(Integer idSorteo, Sorteo sorteo) {
+        repository.actualizarSorteo(idSorteo,
+                sorteo.getFechaSorteo(),
+                sorteo.getLimiteInferiorOnline());
+    }
+
+    @Override
+    @Transactional
+    public void actualizarTicketGanadorSorteo(Integer idSorteo, Sorteo sorteo) {
+        repository.actualizarTicketGanadorSorteo(idSorteo,
+                sorteo.getTicketGanador());
+    }
+
+    @Override
+    @Transactional
+    public void eliminarSorteo(Integer idSorteo) {
+        repository.eliminarSorteo(idSorteo);
+    }
+
     @Override
     public List<Sorteo> listarSorteos() {
         List<Object[]> results = repository.listarSorteos();
@@ -36,8 +68,9 @@ public class SorteoServiceImpl implements  SorteoService{
             sorteo.setIdSorteo((Integer) result[0]);
             sorteo.setIdJuego((Integer) result[1]);
             sorteo.setFechaSorteo((Date) result[2]);
-            sorteo.setTicketGanador((String) result[3]);
-            sorteo.setActivo((Boolean) result[4]);
+            sorteo.setLimiteInferiorOnline((Integer) result[3]);
+            sorteo.setTicketGanador((String) result[4]);
+            sorteo.setActivo((Boolean) result[5]);
 
             sorteos.add(sorteo);
         }
@@ -56,8 +89,9 @@ public class SorteoServiceImpl implements  SorteoService{
             sorteo.setIdSorteo((Integer) result[0]);
             sorteo.setIdJuego((Integer) result[1]);
             sorteo.setFechaSorteo((Date) result[2]);
-            sorteo.setTicketGanador((String) result[3]);
-            sorteo.setActivo((Boolean) result[4]);
+            sorteo.setLimiteInferiorOnline((Integer) result[3]);
+            sorteo.setTicketGanador((String) result[4]);
+            sorteo.setActivo((Boolean) result[5]);
 
             sorteos.add(sorteo);
         }
@@ -65,25 +99,51 @@ public class SorteoServiceImpl implements  SorteoService{
         return sorteos;
     }
 
+    @Override
+    public List<Sorteo> listarSorteoPorJuego(Integer idJuego) {
+        List<Object[]> results = repository.listarSorteoPorJuego(idJuego);
+        List<Sorteo> sorteos = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Sorteo sorteo = new Sorteo();
+
+            sorteo.setIdSorteo((Integer) result[0]);
+            sorteo.setIdJuego((Integer) result[1]);
+            sorteo.setFechaSorteo((Date) result[2]);
+            sorteo.setLimiteInferiorOnline((Integer) result[3]);
+            sorteo.setTicketGanador((String) result[4]);
+            sorteo.setActivo((Boolean) result[5]);
+
+            sorteos.add(sorteo);
+        }
+
+        return sorteos;
+    }
+
+    @Override
     public List<CompraSorteoUsuario> listarCompraSorteoPorUsuario_MsvcPago(Integer idUsuario) {
         List<CompraSorteoUsuario> results = listarCompraSorteoPorUsuario_MsvcPago_Client(idUsuario);
         List<CompraSorteoUsuario> sorteos = new ArrayList<>();
 
-        for(CompraSorteoUsuario result : results){
-            CompraSorteoUsuario sorteo = new CompraSorteoUsuario();
+        if(results != null){
+            for(CompraSorteoUsuario result : results){
+                CompraSorteoUsuario sorteo = new CompraSorteoUsuario();
 
-            sorteo.setIdCompraSorteo(result.getIdCompraSorteo());
-            sorteo.setJuego(result.getJuego());
-            sorteo.setFechaSorteo(result.getFechaSorteo());
-            sorteo.setFechaCompra(result.getFechaCompra());
-            sorteo.setCatidadTickets(result.getCatidadTickets());
-            sorteo.setEstadoPago(result.getEstadoPago());
-            sorteo.setPremio(result.getPremio());
-            sorteo.setMonto(result.getMonto());
-            sorteo.setTickets(ticketSorteoService.listarTicketSorteoPorCompraSorteo(result.getIdCompraSorteo()));
+                sorteo.setIdSorteo(result.getIdSorteo());
+                sorteo.setIdCompraSorteo(result.getIdCompraSorteo());
+                sorteo.setJuego(result.getJuego());
+                sorteo.setFechaSorteo(result.getFechaSorteo());
+                sorteo.setFechaCompra(result.getFechaCompra());
+                sorteo.setCatidadTickets(result.getCatidadTickets());
+                sorteo.setEstadoPago(result.getEstadoPago());
+                sorteo.setPremio(result.getPremio());
+                sorteo.setMonto(result.getMonto());
+                sorteo.setTickets(ticketSorteoService.listarTicketSorteoPorCompraSorteo(result.getIdCompraSorteo()));
 
-            sorteos.add(sorteo);
+                sorteos.add(sorteo);
+            }
         }
+
         return sorteos;
     }
 

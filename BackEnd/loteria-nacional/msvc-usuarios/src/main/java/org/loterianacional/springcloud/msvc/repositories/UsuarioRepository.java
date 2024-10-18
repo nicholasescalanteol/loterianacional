@@ -1,6 +1,6 @@
 package org.loterianacional.springcloud.msvc.repositories;
 
-import feign.Param;
+import org.springframework.data.repository.query.Param;
 import org.loterianacional.springcloud.msvc.models.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -80,6 +80,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Object[]> listarUsuarioPorDni(@Param("dni") String dni);
 
 
+    @Query(value = "EXEC usuario.spVerificarExistenciaNombreUsuario :nombreUsuario",nativeQuery = true)
+    Integer nombreUsuarioExistente(@Param("nombreUsuario") String nombreUsuario);
     @Query(value = "EXEC usuario.spVerificarExistenciaDni :dni",nativeQuery = true)
     Integer dniExistente(@Param("dni") String dni);
 

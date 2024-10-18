@@ -3,6 +3,7 @@ package org.loterianacional.springcloud.msvc.pagos.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -42,7 +43,7 @@ public class CompraSorteo {
     private Integer idTipoTicket;
 
     @Column(name = "monto")
-    private Double monto;
+    private BigDecimal monto;
 
     @Column(name = "idMetodoPago")
     private Integer idMetodoPago;

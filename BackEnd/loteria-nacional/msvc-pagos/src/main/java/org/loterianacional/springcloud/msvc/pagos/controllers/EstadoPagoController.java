@@ -1,9 +1,7 @@
 package org.loterianacional.springcloud.msvc.pagos.controllers;
 
 import org.loterianacional.springcloud.msvc.pagos.models.entities.EstadoPago;
-import org.loterianacional.springcloud.msvc.pagos.models.entities.TipoVenta;
 import org.loterianacional.springcloud.msvc.pagos.services.EstadoPagoService;
-import org.loterianacional.springcloud.msvc.pagos.services.TipoVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

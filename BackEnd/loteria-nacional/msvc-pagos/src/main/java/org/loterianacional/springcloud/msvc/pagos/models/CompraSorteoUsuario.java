@@ -3,6 +3,7 @@ package org.loterianacional.springcloud.msvc.pagos.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -13,6 +14,7 @@ import java.util.Date;
 @EqualsAndHashCode
 public class CompraSorteoUsuario {
 
+    private Integer idSorteo;
     private Integer idCompraSorteo;
     private String juego;
 
@@ -22,6 +24,6 @@ public class CompraSorteoUsuario {
     private Integer catidadTickets;
     private String estadoPago;
     private String premio;
-    private Double monto;
+    private BigDecimal monto;
 
 }

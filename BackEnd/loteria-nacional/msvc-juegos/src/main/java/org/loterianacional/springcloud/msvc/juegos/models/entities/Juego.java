@@ -3,6 +3,8 @@ package org.loterianacional.springcloud.msvc.juegos.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -22,7 +24,7 @@ public class Juego {
     @Column(name = "descripcion")
     private String descripcion;
     @Column(name = "precio")
-    private Double precio;
+    private BigDecimal precio;
     @Column(name = "activo")
     private Boolean activo;
 

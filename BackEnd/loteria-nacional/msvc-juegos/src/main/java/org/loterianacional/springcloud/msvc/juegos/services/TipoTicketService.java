@@ -8,4 +8,8 @@ public interface TipoTicketService {
 
     List<TipoTicket> listarTipoTicket();
 
+    List<TipoTicket> listarTipoTicketPorId(Integer idTipoTicket);
+
+    void actualizarTipoTicket(Integer idTipoTicket, TipoTicket tipoTicket);
+
 }
